@@ -3,21 +3,17 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 
-var wordPairSchema = new Schema({
+var UserSchema = new Schema({
   userId: {
     type: Number,
   },
-
-  en: {
+  username: {
     type: String,
   },
-  vn: {
+  password: {
     type: String,
   },
-    exampleUseEn: {
-    type: String,
-  },
-    exampleUseVn: {
+  emailAddress: {
     type: String,
   },
   created_date: {
@@ -29,9 +25,9 @@ var wordPairSchema = new Schema({
     default: Date.now
   },
   status: {
-      type: Number,
-      default: 0
+      type: String,
+      default: "defaultUser"
   }
 });
 
-module.exports = mongoose.model('Words', wordPairSchema);
+module.exports = mongoose.model('Users', UserSchema);
