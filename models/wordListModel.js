@@ -16,15 +16,18 @@ var wordPairSchema = new Schema({
     exampleUseVn: {
     type: String,
   },
-  Created_date: {
+  created_date: {
+    type: Date,
+    default: Date.now
+  },
+  update_date: {
     type: Date,
     default: Date.now
   },
   status: {
-    type: [{
       type: Number,
       default: 0
-  }]}
+  }
 });
 
 module.exports = mongoose.model('Words', wordPairSchema);
