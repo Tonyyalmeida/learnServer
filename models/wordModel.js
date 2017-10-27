@@ -3,11 +3,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 
-var wordPairSchema = new Schema({
-  userId: {
+var WordSchema = new Schema({
+  wordId: {
     type: Number,
   },
-
   en: {
     type: String,
   },
@@ -34,4 +33,4 @@ var wordPairSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('Words', wordPairSchema);
+module.exports = mongoose.model('Words', WordSchema);
