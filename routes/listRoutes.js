@@ -1,11 +1,11 @@
 'use strict';
 module.exports = function(app) {
-  var wordPair = require('../controllers/wordPairController');
+  var list = require('../controllers/listController');
 
   // todoList Routes
-  app.route('/words')
-    .get(wordPair.list_all_words)
-    .post(wordPair.create_a_word);
+  app.route('/list')
+    .get(list.all_lists)
+    .post(list.create_a_word);
 
 
 //   app.route('/words/:wordId')

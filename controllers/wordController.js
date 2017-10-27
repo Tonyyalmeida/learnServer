@@ -13,10 +13,9 @@ exports.list_all_words = function(req, res) {
 };
 
 exports.create_a_word = function(req, res) {
-  var number = Words.count({}, function(err, count) {
+  Words.count({}, function(err, count) {
   if (err) {console.log('error')}
   req.body.wordId = count;
-  console.log(req.body)
   var new_word = new Words(req.body);
   new_word.save(function(err, word) {
     if (err)

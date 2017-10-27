@@ -3,6 +3,7 @@ var express = require('express'),
   port = process.env.PORT || 3101,
   mongoose = require('mongoose'),
   Task = require('./models/WordModel'), //created model loading here
+  Task2 = require('./models/ListModel'), //created model loading here
   bodyParser = require('body-parser');
   
 // mongoose instance connection url connection
@@ -23,7 +24,7 @@ app.use(function(req, res, next) {
 });
 
 
-var routes = require('./routes/wordPairRoutes'); //importing route
+var routes = require('./routes/routes'); //importing route
 routes(app); //register the route
 app.listen(port);
 

@@ -7,18 +7,8 @@ var ListSchema = new Schema({
   userId: {
     type: Number,
   },
-
-  en: {
-    type: String,
-  },
-  vn: {
-    type: String,
-  },
-    exampleUseEn: {
-    type: String,
-  },
-    exampleUseVn: {
-    type: String,
+  wordIds: {
+    type: Array
   },
   created_date: {
     type: Date,
@@ -28,10 +18,6 @@ var ListSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  status: {
-      type: Number,
-      default: 0
-  }
 });
 
 module.exports = mongoose.model('List', ListSchema);
