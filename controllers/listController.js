@@ -56,8 +56,11 @@ List.find({userId : req.params.userId}, function(err, list) {
 };
 
 exports.get_words_from_list = function (req, res) {
-List.find( {}).where('wordId').in([28, 29])}
-
+List.find({listId: req.params.listId}, function (err, doc1) {
+var wordArray = doc1[0].wordIds[0].split(',');  
+Words.find({}).where('wordId').in(wordArray).exec(function (err, doc) {res.send(doc)})}
+)}
+//Words.find({}).where('wordId').in([28, 29]).exec(function (err, doc) {res.send(doc)})}
 
 
 // exports.create_a_word = function(req, res) {
