@@ -7,6 +7,11 @@ var ListSchema = new Schema({
   userId: {
     type: Number,
   },
+  listId: {
+    type: Number,
+    index: true,
+    default: 2
+  },
   wordIds: {
     type: Array
   },
