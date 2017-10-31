@@ -12,7 +12,7 @@ module.exports = function(app) {
     .get(list.list_all_lists).post(list.create_a_list);
 
 app.route('/newlist').post(list.update_a_list);
-//app.route('/list/:userId').get(list.get_all_lists_from_user)
+app.route('/list/:userId').get(list.get_words_from_user)
 
 app.route('/word/:listId').get(list.get_words_from_list);
 

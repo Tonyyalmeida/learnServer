@@ -28,7 +28,6 @@ exports.create_a_list = function(req, res) {
 };
 
 exports.update_a_list = function (req, res) {
-console.log(req.body)
 List.findOneAndUpdate({listId: req.body.listId}, {wordIds: req.body.wordIds}, function (err, doc) {
 if (err) return err;
 var response = Object.assign({doc}, { message: "hi"} );
@@ -47,7 +46,6 @@ var response = Object.assign({doc}, { message: "hi"} );
 
 
 exports.get_all_lists_from_user = function (req, res) {
-console.log(req.params)
 List.find({userId : req.params.userId}, function(err, list) {
     if (err)
       res.send(err);
@@ -55,11 +53,27 @@ List.find({userId : req.params.userId}, function(err, list) {
   });
 };
 
+exports.get_words_from_user = function (req, res) {
+List.find({userId : req.params.userId}, function(err, list) {
+    if (err)
+     { res.send(err) };
+      var tam = [];
+      var drei = getWordsFromWordIds([28, 29, 30]).then(function(doc) {res.send(doc)});
+  });
+}
+
+
 exports.get_words_from_list = function (req, res) {
 List.find({listId: req.params.listId}, function (err, doc1) {
 var wordArray = doc1[0].wordIds[0].split(',');  
 Words.find({}).where('wordId').in(wordArray).exec(function (err, doc) {res.send(doc)})}
 )}
+
+function getWordsFromWordIds (wordArray) {
+var h = Words.find({}).where('wordId').in(wordArray).exec();
+return h;
+}
+
 //Words.find({}).where('wordId').in([28, 29]).exec(function (err, doc) {res.send(doc)})}
 
 
