@@ -81,7 +81,8 @@ return h;
 function loopThroughWordIdsArray (wordIdsArray, counter, umdr, tam, res) {
 getWordsFromWordIds(wordIdsArray[counter].wordIds).then(
 function(doc) {
-  tam.push(doc);
+
+  tam.push({listId: wordIdsArray[counter].listId, words: doc});
   counter += 1;
 if (counter < umdr) {
 loopThroughWordIdsArray(wordIdsArray, counter, umdr, tam, res);
