@@ -5,12 +5,24 @@ var mongoose = require('mongoose'),
 Words = mongoose.model('Words');
 
 exports.list_all_words = function(req, res) {
-  Words.find({}, function(err, words) {
-    if (err)
-      res.send(err);
-       res.json(words);
-  });
+// getWordsPromise().then(function(words) {
+//   res.send(words)
+// })
+var promise = queryWords.exec();
+promise.then(function(words){
+  res.send(words);
+})
 };
+
+function getWordsPromise() {
+return Words.find({}, function(err, words) {
+    if (err)
+      console.log(err)
+    return words;
+  });
+}
+
+var queryWords = Words.find({});
 
 exports.create_a_word = function(req, res) {
   Words.count({}, function(err, count) {
@@ -23,3 +35,7 @@ exports.create_a_word = function(req, res) {
     res.json(word);
   });});
 };
+
+
+
+
