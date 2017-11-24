@@ -65,8 +65,11 @@ res.send("All word parameter should be defined")
 
 exports.getAllWordsByUserId = function (req, res) {
 //first get List Id,
+console.log("hi im her")
 getListsbyUserIdPromise(req.params.userId).then(function(lists) {
-  res.send(lists)
+ var listArray = lists.map( x => x.listId);
+ res.send(listArray);
+// this should call another Promise
 }, function (err) {
   console.log("couldn't get the lists")
 })
@@ -78,12 +81,12 @@ getListsbyUserIdPromise(req.params.userId).then(function(lists) {
 
 function getListsbyUserIdPromise (userId) {
 return List.find({userId : userId}, function(err, list) {
-    if (err)
-     return err;
+  //  if (err)
+   //  return err;
     // var listArray = [];
     // var listArray = list.forEach(x => x.listId);
     // console.log(listArray)
-    return "hi"
+  return list;
     // should return an array of listIds.
   });
 }
