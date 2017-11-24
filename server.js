@@ -11,6 +11,8 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/test',  {
   useMongoClient: true,
   /* other options */
+}, function (err) {
+  console.log('could not connect');
 }); 
 
 

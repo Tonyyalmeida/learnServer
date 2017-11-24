@@ -10,10 +10,6 @@ var ListSchema = new Schema({
   listId: {
     type: Number,
     index: true,
-    default: 2
-  },
-  wordIds: {
-    type: Array
   },
   created_date: {
     type: Date,
@@ -23,6 +19,9 @@ var ListSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  listName: {
+    type: String,
+  }
 });
 
 module.exports = mongoose.model('List', ListSchema);

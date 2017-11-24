@@ -30,6 +30,9 @@ var WordSchema = new Schema({
   status: {
       type: Number,
       default: 0
+  },
+  listId: {
+    type: Number
   }
 });
 

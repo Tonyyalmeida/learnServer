@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 List = mongoose.model('List');
 var Words = mongoose.model('Words');
 
+//Only For Test Purposes
 exports.list_all_lists = function(req, res) {
   console.log(req.originalUrl)
 List.find({}, function(err, list) {
@@ -15,7 +16,7 @@ List.find({}, function(err, list) {
 };
 
 exports.create_a_list = function(req, res) {
-  console.log(req.body.wordIds)
+if (req.body.userId) {
   List.count({}, function(err, count) {
   if (err) {console.log('error')}
   req.body.listId = count;
@@ -25,12 +26,80 @@ exports.create_a_list = function(req, res) {
       res.send(err);
     res.json(list);
   });});
+} else {
+ res.send('userId is not defined')
+}
 };
 
+
+exports.getListbyListId = function (req, res) {
+  if (req.params.listId) {
+List.find({listId : req.params.listId}, function(err, list) {
+    if (err)
+      res.send("could not be found");
+      res.json(list);
+  });
+}
+else {
+res.send("parameter ListId needs to be defined")
+}
+};
+
+
+
+exports.updateListbyListId = function (req, res) {
+
+if (req.params.listId && req.body.listName) {
+List.findOneAndUpdate({listId: req.params.listId }, {listName: req.body.listName, userId: req.body.userId}, {new: true},  function (err, doc) {
+if (err) return err;
+res.json(doc);
+// var response = Object.assign({doc}, { message: "wordByWordId updated successfully odern icht? "} );
+//  res.json(response);
+})
+}
+else {
+res.send("All word parameter should be defined")
+}
+};
+
+
+exports.getAllWordsByUserId = function (req, res) {
+//first get List Id,
+getListsbyUserIdPromise(req.params.userId).then(function(lists) {
+  res.send(lists)
+}, function (err) {
+  console.log("couldn't get the lists")
+})
+
+// for each ListId, get Words, 
+
+// respond
+}
+
+function getListsbyUserIdPromise (userId) {
+return List.find({userId : userId}, function(err, list) {
+    if (err)
+     return err;
+    // var listArray = [];
+    // var listArray = list.forEach(x => x.listId);
+    // console.log(listArray)
+    return "hi"
+    // should return an array of listIds.
+  });
+}
+
+function getWordsbyListIdPromise () {
+
+}
+
+//============================
+
+
+//Probably don't need it
 exports.update_a_list = function (req, res) {
 List.findOneAndUpdate({listId: req.body.listId}, {wordIds: req.body.wordIds}, function (err, doc) {
 if (err) return err;
-var response = Object.assign({doc}, { message: "hil3"} );
+var response = Object.assign({doc}, { message: "updated successfully"} );
  res.json(response);
 })
 };
