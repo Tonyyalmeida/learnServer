@@ -68,7 +68,13 @@ exports.getAllWordsByUserId = function (req, res) {
 console.log("hi im her")
 getListsbyUserIdPromise(req.params.userId).then(function(lists) {
  var listArray = lists.map( x => x.listId);
- res.send(listArray);
+
+ Promise.all(listArray.map(x => getWordsbyListIdPromise(x))).then(values => res.send(values));
+//  getWordsbyListIdPromise(listIndex).then(function(wordsList) {
+//    res.send(wordsList);
+//  })
+
+
 // this should call another Promise
 }, function (err) {
   console.log("couldn't get the lists")
@@ -91,8 +97,10 @@ return List.find({userId : userId}, function(err, list) {
   });
 }
 
-function getWordsbyListIdPromise () {
-
+function getWordsbyListIdPromise (listId) {
+return Words.find({listId: listId}, function( err, wordsList) {
+  return wordsList;
+} )
 }
 
 //============================
