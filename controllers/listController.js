@@ -69,7 +69,7 @@ console.log("hi im her")
 getListsbyUserIdPromise(req.params.userId).then(function(lists) {
  var listArray = lists.map( x => x.listId);
 
- Promise.all(listArray.map(x => getWordsbyListIdPromise(x))).then(values => res.send(values));
+ Promise.all(listArray.map(x => getWordsbyListIdPromise(x))).then(values => res.send({listArray, values}));
 //  getWordsbyListIdPromise(listIndex).then(function(wordsList) {
 //    res.send(wordsList);
 //  })
