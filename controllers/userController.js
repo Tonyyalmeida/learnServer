@@ -7,59 +7,33 @@ var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var passport = require("passport");
 var passportJWT = require("passport-jwt");
+var LocalStrategy = require('passport-local').Strategy;
 var ExtractJwt = passportJWT.ExtractJwt;
 var JwtStrategy = passportJWT.Strategy;
+
+// var jwtOptions = {}
+// jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader();
+// jwtOptions.secretOrKey = 'tasmanianDevil';
+
+// var strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
+//   console.log('payload received', jwt_payload);
+//   // usually this would be a database call:
+//   var user = users[_.findIndex(users, {id: jwt_payload.id})];
+//   if (user) {
+//     next(null, user);
+//   } else {
+//     next(null, false);
+//   }
+// });
 
 exports.list_all_users = function(req, res) {
   Users.find({}, function(err, users) {
     if (err)
       { res.send(err); }
-     res.header("Access-Control-Allow-Origin", "*");
-   res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
-   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
        res.json(users);
   });
 };
 
-exports.create_a_user = function(req, res) {
-  var newUser = new Users(req.body);
-  newUser.save(function(err, user) {
-    if (err)
-     { res.send(err) }
-           res.header("Access-Control-Allow-Origin", "*");
-   res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
-   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.json(user);
-  });
-};
-
-
-/////////////////////////////////////////// from other tutorial
-exports.login =  function(req, res) {
-  if(req.body.name && req.body.password){
-    var name = req.body.name;
-    var password = req.body.password;
-  }
-  // usually this would be a database call:
-  var user = users[_.findIndex(users, {name: name})];
-  if( ! user ){
-    res.status(401).json({message:"no such user found"});
-  }
-
-  if(user.password === req.body.password) {
-    // from now on we'll identify the user by the id and the id is the only personalized value that goes into our token
-    var payload = {id: user.id};
-    var token = jwt.sign(payload, jwtOptions.secretOrKey);
-    res.json({message: "ok", token: token});
-  } else {
-    res.status(401).json({message:"passwords did not match"});
-  }
-}
-//////////////////////////////////////////////
-
-
-
-//module.exports = comparePassword;
 //taken Straight from bcrypt docs
 function createUser (newUser, callback){
 	bcrypt.genSalt(10, function(err, salt) {
@@ -93,9 +67,11 @@ exports.signup = function (req, res) {
     {
       console.log(typeof foundUser[0]); res.send("Email address is already registered")}
   else {
-    console.log(typeof foundUser[0]);
-    var newUser = new Users({
-			emailAddress: email,
+   Users.count({}, function(err, count) {
+     if (err) throw err;
+  var newUser = new Users({
+			userId: count,
+      emailAddress: email,
 			userName: username,
 			password: password1
 		});
@@ -103,19 +79,66 @@ exports.signup = function (req, res) {
 			if(err) throw err;
 		});
     res.send(username + " with email " + email +  " has been registered successfully");
-    //normaly would call function to generate token; or not? 
-  }
-  })}}
- 
 
-// var newUser = new Users({
-// 			emailAddress: email,
-// 			userName: username,
-// 			password: password1
-// 		});
-// 		createUser(newUser, function(err, user){
-// 			if(err) throw err;
-// 		});
-//     res.send(username + " with email " + email +  " has been registered successfully");
-// 		// whats is the avantage of using redirect? 
-// 		}};
+   })  
+    //normaly would call function to generate token; or not?  -> NO
+    //Sanitization is still missing?
+  }
+})}}
+
+// passport.use(new LocalStrategy(
+//   function(username, password, done) {
+//    getUserByUsername(username, function(err, user){
+//    	if(err) throw err;
+//    	if(!user){
+//    		return done(null, false);
+//    	}
+//    	comparePassword(password, user.password, function(err, isMatch){
+//    		if(err) throw err;
+//    		if(isMatch){
+//    			return done(null, "das");
+//    		} else {
+//    			return done(null, "hai");
+//    		}
+//    	});
+//    });
+//   }));
+	
+
+// exports.login = function (req, res) {
+// // check passwords
+// // check issue token
+// passport.authenticate('local', { session: false}), function(err, user, info) {
+//     if (err) { return next(err); }
+//     if (!user) { return res.send('/login'); }
+//     req.logIn(user, function(err) {
+//       if (err) { return next(err); }
+//       return res.send('/users/');
+//     });
+// }};
+
+//  function comparePassword(candidatePassword, hash, callback){
+// 	bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
+//     	if(err) throw err;
+//     	callback(null, isMatch);
+// 	});
+// }
+// function getUserByUsername (username, callback) {
+// 	var query = {userName: username};
+// 	Users.findOne(query, callback);
+// }
+
+
+// passport.use(new LocalStrategy(
+//   function(username, password, done) {
+//     Users.findOne({ username: userwername }, function (err, user) {
+//       if (err) { return done(err); }
+//       if (!user) { return done(null, false); }
+//       if (!user.verifyPassword(password)) { return done(null, false); }
+//       return done(null, user);
+//     });
+//   }
+// ));
+
+
+

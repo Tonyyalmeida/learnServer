@@ -11,8 +11,9 @@ module.exports = function(app) {
  app.route('/lists').post(list.create_a_list);
  app.route('/lists/:listId').get(list.getListbyListId).post(list.updateListbyListId);
  app.route('/users/:userId/words').get(list.getAllWordsByUserId);
- app.route('/signup').post(users.signup);
+ app.route('/users').post(users.signup);
  app.route('/all_users').get(users.list_all_users);
+ //app.route('/login').post(users.login);
   
 
 //app.route('/list/:userId').get(list.get_words_from_user)
