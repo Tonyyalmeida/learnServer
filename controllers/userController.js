@@ -1,6 +1,6 @@
 'use strict';
 
-
+var express = require('express');
 var mongoose = require('mongoose');
 var Users = mongoose.model('Users');
 var bcrypt = require('bcryptjs');
@@ -10,6 +10,8 @@ var passportJWT = require("passport-jwt");
 var LocalStrategy = require('passport-local').Strategy;
 var ExtractJwt = passportJWT.ExtractJwt;
 var JwtStrategy = passportJWT.Strategy;
+var router = express.Router();
+
 
 // var jwtOptions = {}
 // jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader();
@@ -86,59 +88,34 @@ exports.signup = function (req, res) {
   }
 })}}
 
-// passport.use(new LocalStrategy(
-//   function(username, password, done) {
-//    getUserByUsername(username, function(err, user){
-//    	if(err) throw err;
-//    	if(!user){
-//    		return done(null, false);
-//    	}
-//    	comparePassword(password, user.password, function(err, isMatch){
-//    		if(err) throw err;
-//    		if(isMatch){
-//    			return done(null, "das");
-//    		} else {
-//    			return done(null, "hai");
-//    		}
-//    	});
-//    });
-//   }));
-	
+exports.locallogin = new LocalStrategy(
+  function(username, password, done) {
+   getUserByUsername(username, function(err, user){
+   	if(err) throw err;
+   	if(!user){
+   		return done(null, false);
+   	}
+   	comparePassword(password, user.password, function(err, isMatch){
+   		if(err) throw err;
+   		if(isMatch){
+   			return done(null, {message: user.userName + " has logged in"});
+   		} else {
+   			return done(null, false);
+   		}
+   	});
+   });
+  });
 
-// exports.login = function (req, res) {
-// // check passwords
-// // check issue token
-// passport.authenticate('local', { session: false}), function(err, user, info) {
-//     if (err) { return next(err); }
-//     if (!user) { return res.send('/login'); }
-//     req.logIn(user, function(err) {
-//       if (err) { return next(err); }
-//       return res.send('/users/');
-//     });
-// }};
-
-//  function comparePassword(candidatePassword, hash, callback){
-// 	bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
-//     	if(err) throw err;
-//     	callback(null, isMatch);
-// 	});
-// }
-// function getUserByUsername (username, callback) {
-// 	var query = {userName: username};
-// 	Users.findOne(query, callback);
-// }
-
-
-// passport.use(new LocalStrategy(
-//   function(username, password, done) {
-//     Users.findOne({ username: userwername }, function (err, user) {
-//       if (err) { return done(err); }
-//       if (!user) { return done(null, false); }
-//       if (!user.verifyPassword(password)) { return done(null, false); }
-//       return done(null, user);
-//     });
-//   }
-// ));
+ function comparePassword(candidatePassword, hash, callback){
+	bcrypt.compare(candidatePassword, hash, function(err, isMatch) {
+    	if(err) throw err;
+    	callback(null, isMatch);
+	});
+}
+function getUserByUsername (username, callback) {
+	var query = {userName: username};
+	Users.findOne(query, callback);
+}
 
 
 

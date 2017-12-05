@@ -49,11 +49,13 @@ app.use(function(req, res, next) {
    next();
 });
 
-var routes = require('./routes/routes'); //importing route
-routes(app); //register the route
+var routes = require('./routes/routes')(app, passport); //importing route
+//routes(app); //register the route
 app.listen(port);
 
 
 
-
+// app.post('/login', passport.authenticate('local'), function(req, res) {
+// req.send("hi");
+// });
 console.log('todo list RESTful API server started on: ' + port);
