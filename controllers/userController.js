@@ -1,6 +1,7 @@
 'use strict';
 
 var express = require('express');
+var app = express();
 var mongoose = require('mongoose');
 var Users = mongoose.model('Users');
 var bcrypt = require('bcryptjs');
@@ -11,6 +12,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var ExtractJwt = passportJWT.ExtractJwt;
 var JwtStrategy = passportJWT.Strategy;
 var router = express.Router();
+var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
+app.set("superSecret", "fromControllerhello");
 
 
 // var jwtOptions = {}
@@ -98,8 +101,10 @@ exports.locallogin = new LocalStrategy(
    	comparePassword(password, user.password, function(err, isMatch){
    		if(err) throw err;
    		if(isMatch){
-   			return done(null, {message: user.userName + " has logged in"});
-   		} else {
+        var token = createToken(user);
+   			return done(null, token);
+       }      
+       else {
    			return done(null, false);
    		}
    	});
@@ -117,5 +122,15 @@ function getUserByUsername (username, callback) {
 	Users.findOne(query, callback);
 }
 
+function createToken(user) {
+  var payload = {
+  userName: user.userName,
+  userId: user.userId
+}
+var token = jwt.sign(payload, app.get('superSecret'), {
+  expiresIn: "1h"// expires in 24 hours
+});
+return {message: "klappt", token: token};
+}
 
 

@@ -16,7 +16,7 @@ module.exports = function(app, passport) {
  app.route('/users').post(users.signup);
  app.route('/all_users').get(users.list_all_users);
  app.route('/login').post(passport.authenticate('localStrategy', {session: false}), function(req, res) {
-     res.send(req.user.message);
+     res.json(req.user);
  });
 //  app.route('/login').post(users.login);
   
