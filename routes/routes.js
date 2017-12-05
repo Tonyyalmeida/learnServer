@@ -18,6 +18,7 @@ module.exports = function(app, passport) {
  app.route('/login').post(passport.authenticate('localStrategy', {session: false}), function(req, res) {
      res.json(req.user);
  });
+ app.route("/checktoken").get(users.checkMyToken);
 //  app.route('/login').post(users.login);
   
 

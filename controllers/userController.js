@@ -127,10 +127,29 @@ function createToken(user) {
   userName: user.userName,
   userId: user.userId
 }
+console.log(payload);
 var token = jwt.sign(payload, app.get('superSecret'), {
   expiresIn: "1h"// expires in 24 hours
 });
 return {message: "klappt", token: token};
 }
+
+
+exports.checkMyToken = function(req, res) {
+var token =  req.headers['authorization'];
+if (token)
+  jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
+    if (err) {
+      return res.json({ success: false, message: 'Failed to authenticate token.' });    
+    } else {
+      // if everything is good, save to request for use in other routes
+      res.send(decoded);
+      // decoded includes the payload and expiration date
+    }
+  });
+else {
+  res.send("no token found");
+}
+} 
 
 
