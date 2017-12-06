@@ -6,19 +6,20 @@ module.exports = function(app, passport) {
    var localStrategy = users.locallogin;
 
  passport.use('localStrategy', localStrategy);
+ app.use("/api", users.checkMyToken);
  app.route('/all_words').get(wordPair.list_all_words);
  app.route('/all_lists').get(list.list_all_lists);
- app.route('/words').post(wordPair.create_a_word);
- app.route('/words/:wordId').get(wordPair.getWordbyWordId).post(wordPair.updateWordbyWordId);
- app.route('/lists').post(list.create_a_list);
- app.route('/lists/:listId').get(list.getListbyListId).post(list.updateListbyListId);
- app.route('/users/:userId/words').get(list.getAllWordsByUserId);
- app.route('/users').post(users.signup);
  app.route('/all_users').get(users.list_all_users);
+ app.route('/api/words').post(wordPair.create_a_word);
+ app.route('/api/words/:wordId').get(wordPair.getWordbyWordId).post(wordPair.updateWordbyWordId);
+ app.route('/api/lists').post(list.create_a_list);
+ app.route('/api/lists/:listId').get(list.getListbyListId).post(list.updateListbyListId);
+ app.route('/api/users/:userId/words').get(list.getAllWordsByUserId);
+ app.route('/users').post(users.signup);
  app.route('/login').post(passport.authenticate('localStrategy', {session: false}), function(req, res) {
      res.json(req.user);
  });
- app.route("/checktoken").get(users.checkMyToken);
+ //app.route("/checktoken").get(users.checkMyToken);
 //  app.route('/login').post(users.login);
   
 

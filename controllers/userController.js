@@ -72,6 +72,12 @@ exports.signup = function (req, res) {
     {
       console.log(typeof foundUser[0]); res.send("Email address is already registered")}
   else {
+Users.find({userName: username}, function (err, foundUser) {
+  if (err) throw err;
+  if (typeof foundUser[0] !== "undefined") 
+    {
+      console.log(typeof foundUser[0]); res.send("Username is already registered")}
+  else{
    Users.count({}, function(err, count) {
      if (err) throw err;
   var newUser = new Users({
@@ -85,11 +91,8 @@ exports.signup = function (req, res) {
 		});
     res.send(username + " with email " + email +  " has been registered successfully");
 
-   })  
-    //normaly would call function to generate token; or not?  -> NO
-    //Sanitization is still missing?
-  }
-})}}
+   })};  
+		})}})}}
 
 exports.locallogin = new LocalStrategy(
   function(username, password, done) {
@@ -127,7 +130,6 @@ function createToken(user) {
   userName: user.userName,
   userId: user.userId
 }
-console.log(payload);
 var token = jwt.sign(payload, app.get('superSecret'), {
   expiresIn: "1h"// expires in 24 hours
 });
@@ -135,7 +137,7 @@ return {message: "klappt", token: token};
 }
 
 
-exports.checkMyToken = function(req, res) {
+exports.checkMyToken = function(req, res, next) {
 var token =  req.headers['authorization'];
 if (token)
   jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
@@ -143,7 +145,8 @@ if (token)
       return res.json({ success: false, message: 'Failed to authenticate token.' });    
     } else {
       // if everything is good, save to request for use in other routes
-      res.send(decoded);
+      console.log(decoded);
+			next();
       // decoded includes the payload and expiration date
     }
   });
