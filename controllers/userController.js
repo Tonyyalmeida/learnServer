@@ -1,6 +1,7 @@
 'use strict';
 
 var express = require('express');
+var app = express();
 var mongoose = require('mongoose');
 var Users = mongoose.model('Users');
 var bcrypt = require('bcryptjs');
@@ -11,6 +12,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var ExtractJwt = passportJWT.ExtractJwt;
 var JwtStrategy = passportJWT.Strategy;
 var router = express.Router();
+var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
+app.set("superSecret", "fromControllerhello");
 
 
 // var jwtOptions = {}
@@ -69,6 +72,12 @@ exports.signup = function (req, res) {
     {
       console.log(typeof foundUser[0]); res.send("Email address is already registered")}
   else {
+Users.find({userName: username}, function (err, foundUser) {
+  if (err) throw err;
+  if (typeof foundUser[0] !== "undefined") 
+    {
+      console.log(typeof foundUser[0]); res.send("Username is already registered")}
+  else{
    Users.count({}, function(err, count) {
      if (err) throw err;
   var newUser = new Users({
@@ -82,11 +91,8 @@ exports.signup = function (req, res) {
 		});
     res.send(username + " with email " + email +  " has been registered successfully");
 
-   })  
-    //normaly would call function to generate token; or not?  -> NO
-    //Sanitization is still missing?
-  }
-})}}
+   })};  
+		})}})}}
 
 exports.locallogin = new LocalStrategy(
   function(username, password, done) {
@@ -98,8 +104,10 @@ exports.locallogin = new LocalStrategy(
    	comparePassword(password, user.password, function(err, isMatch){
    		if(err) throw err;
    		if(isMatch){
-   			return done(null, {message: user.userName + " has logged in"});
-   		} else {
+        var token = createToken(user);
+   			return done(null, token);
+       }      
+       else {
    			return done(null, false);
    		}
    	});
@@ -117,5 +125,34 @@ function getUserByUsername (username, callback) {
 	Users.findOne(query, callback);
 }
 
+function createToken(user) {
+  var payload = {
+  userName: user.userName,
+  userId: user.userId
+}
+var token = jwt.sign(payload, app.get('superSecret'), {
+  expiresIn: "1h"// expires in 24 hours
+});
+return {message: "klappt", token: token};
+}
+
+
+exports.checkMyToken = function(req, res, next) {
+var token =  req.headers['authorization'];
+if (token)
+  jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
+    if (err) {
+      return res.json({ success: false, message: 'Failed to authenticate token.' });    
+    } else {
+      // if everything is good, save to request for use in other routes
+      console.log(decoded);
+			next();
+      // decoded includes the payload and expiration date
+    }
+  });
+else {
+  res.send("no token found");
+}
+} 
 
 
