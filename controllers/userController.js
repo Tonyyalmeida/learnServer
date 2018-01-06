@@ -63,20 +63,20 @@ exports.signup = function (req, res) {
 	req.checkBody('password2', 'Passwords do not match').equals(req.body.password1);
     	var errors = req.validationErrors(); // an array of objects
 	if(errors){
-		res.json(errors);
+		res.json({error: true, messages: errors});
 		}
 	else {
   Users.find({emailAddress: email}, function (err, foundUser) {
   if (err) throw err;
   if (typeof foundUser[0] !== "undefined") 
     {
-      console.log(typeof foundUser[0]); res.send("Email address is already registered")}
+      console.log(typeof foundUser[0]); res.json({error: true, messages: ["Email address is already registered"]});}
   else {
 Users.find({userName: username}, function (err, foundUser) {
   if (err) throw err;
   if (typeof foundUser[0] !== "undefined") 
     {
-      console.log(typeof foundUser[0]); res.send("Username is already registered")}
+      console.log(typeof foundUser[0]); res.json({error: true, messages: ["Username is already registeredd"]})}
   else{
    Users.count({}, function(err, count) {
      if (err) throw err;
@@ -88,9 +88,9 @@ Users.find({userName: username}, function (err, foundUser) {
 		});
 		createUser(newUser, function(err, user){
 			if(err) throw err;
-		});
-    res.send(username + " with email " + email +  " has been registered successfully");
-
+    });
+    const respondMessage = username + " with email " + email +  " has been registered successfully";
+    res.json({error: false, messages: [respondMessage]})
    })};  
 		})}})}}
 
