@@ -34,7 +34,7 @@ if (req.body.userId) {
 
 exports.getListbyListId = function (req, res) {
   if (req.params.listId) {
-List.find({listId : req.params.listId}, function(err, list) {
+Words.find({listId : req.params.listId}, function(err, list) {
     if (err)
       res.send("could not be found");
       res.json(list);
@@ -44,7 +44,7 @@ else {
 res.send("parameter ListId needs to be defined")
 }
 };
-
+//welchen sinn macht das?
 
 
 exports.updateListbyListId = function (req, res) {

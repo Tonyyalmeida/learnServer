@@ -30,6 +30,7 @@ return Words.find({}, function(err, words) {
 // var queryWords = Words.find({}); 
 
 exports.create_a_word = function(req, res) {
+  console.log(req.body);
 if (req.body.vn && req.body.en && req.body.listId)
 {
   Words.count({}, function(err, count) {
@@ -57,6 +58,20 @@ else {
 res.send("parameter wordId needs to be defined")
 }
 };
+
+exports.updateWordsbyWordIds = function (req, res) {
+Promise.all(req.body.map(x => getWordsbyWordIdsPromise(x))).then(
+  res.send('all saved')
+)
+//error handling still on ToDo
+}
+
+function getWordsbyWordIdsPromise (wordObject) {
+return Words.findOneAndUpdate({wordId: wordObject.wordId},
+{vn: wordObject.vn, en: wordObject.en, status: wordObject.status} , {new: true}, function( err, words) {
+  return words;
+} )
+}
 
 
 exports.updateWordbyWordId  = function (req, res) {
