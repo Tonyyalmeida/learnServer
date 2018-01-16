@@ -133,7 +133,7 @@ function createToken(user) {
 var token = jwt.sign(payload, app.get('superSecret'), {
   expiresIn: "1h"// expires in 24 hours
 });
-return {error: false, token: token};
+return {error: false, token: token, userId: user.userId};
 }
 
 

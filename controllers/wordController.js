@@ -68,7 +68,7 @@ Promise.all(req.body.map(x => getWordsbyWordIdsPromise(x))).then(
 
 function getWordsbyWordIdsPromise (wordObject) {
 return Words.findOneAndUpdate({wordId: wordObject.wordId},
-{vn: wordObject.vn, en: wordObject.en, status: wordObject.status} , {new: true}, function( err, words) {
+{vn: wordObject.vn, en: wordObject.en, status: wordObject.status, exampleUse: wordObject.exampleUse} , {new: true}, function( err, words) {
   return words;
 } )
 }

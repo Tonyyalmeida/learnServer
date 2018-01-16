@@ -62,6 +62,13 @@ res.send("All word parameter should be defined")
 }
 };
 
+exports.getAllListsByUserId = function (req, res) {
+//first get List Id,
+console.log(req.params.userId);
+getListsbyUserIdPromise(req.params.userId).then(function(lists) {
+return lists.map( x => x.listId)}).then(n => res.json(n));
+}
+
 
 exports.getAllWordsByUserId = function (req, res) {
 //first get List Id,
