@@ -64,7 +64,6 @@ res.send("All word parameter should be defined")
 
 exports.getAllListsByUserId = function (req, res) {
 //first get List Id,
-console.log(req.params.userId);
 getListsbyUserIdPromise(req.params.userId).then(function(lists) {
 res.json(lists)})
 //return lists.map( (x) => [x.listId, x.listName])}).then(n => res.json(n));
@@ -73,7 +72,6 @@ res.json(lists)})
 
 exports.getAllWordsByUserId = function (req, res) {
 //first get List Id,
-console.log("hi im her")
 getListsbyUserIdPromise(req.params.userId).then(function(lists) {
  var listArray = lists.map( x => x.listId);
 
