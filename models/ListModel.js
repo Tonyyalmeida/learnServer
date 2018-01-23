@@ -21,7 +21,11 @@ var ListSchema = new Schema({
   },
   listName: {
     type: String,
-  }
+  },
+  listStatus: {
+  type: Number,
+  default: 0
+  },
 });
 
 module.exports = mongoose.model('List', ListSchema);

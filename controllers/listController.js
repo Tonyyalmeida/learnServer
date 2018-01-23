@@ -32,7 +32,7 @@ if (req.body.userId) {
 };
 
 
-exports.getListbyListId = function (req, res) {
+exports.getWordsbyListId = function (req, res) {
   if (req.params.listId) {
 Words.find({listId : req.params.listId}, function(err, list) {
     if (err)
@@ -50,7 +50,7 @@ res.send("parameter ListId needs to be defined")
 exports.updateListbyListId = function (req, res) {
 
 if (req.params.listId && req.body.listName) {
-List.findOneAndUpdate({listId: req.params.listId }, {listName: req.body.listName, userId: req.body.userId}, {new: true},  function (err, doc) {
+List.findOneAndUpdate({listId: req.params.listId }, {listName: req.body.listName, userId: req.body.userId, listStatus: req.body.listStatus}, {new: true},  function (err, doc) {
 if (err) return err;
 res.json(doc);
 // var response = Object.assign({doc}, { message: "wordByWordId updated successfully odern icht? "} );
