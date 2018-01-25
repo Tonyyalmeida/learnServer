@@ -48,11 +48,10 @@ res.send("parameter ListId needs to be defined")
 
 
 exports.updateListbyListId = function (req, res) {
-
 if (req.params.listId && req.body.listName) {
-List.findOneAndUpdate({listId: req.params.listId }, {listName: req.body.listName, userId: req.body.userId, listStatus: req.body.listStatus}, {new: true},  function (err, doc) {
+List.findOneAndUpdate({listId: req.params.listId }, {listName: req.body.listName}, {new: true},  function (err, doc) {
 if (err) return err;
-res.json(doc);
+res.json([doc, "all good"]);
 // var response = Object.assign({doc}, { message: "wordByWordId updated successfully odern icht? "} );
 //  res.json(response);
 })
