@@ -19,7 +19,8 @@ exports.create_a_list = function(req, res) {
 if (req.body.userId) {
   List.count({}, function(err, count) {
   if (err) {console.log('error')}
-  req.body.listId = count;
+  req.body.listId = count+1;
+  console.log(count);
   var new_list= new List(req.body);
   new_list.save(function(err, list) {
     if (err)
