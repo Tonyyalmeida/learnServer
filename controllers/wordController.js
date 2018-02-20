@@ -109,8 +109,10 @@ return Words.findOneAndUpdate({wordId: wordObject.wordId},
 
 exports.updateWordbyWordId  = function (req, res) {
  console.log(req.params.wordId, Object.keys(req.body));
-if (req.params.wordId && req.body.vn && req.body.en && req.body.status && req.body.exampleUseEn && req.body.exampleUseVn) {
-Words.findOneAndUpdate({wordId: req.params.wordId},{vn: req.body.vn, en: req.body.en, status: req.body.status} , {new: true}, function (err, doc) {
+if (req.params.wordId)
+// && req.body.vn && req.body.en && req.body.status)
+ {
+Words.findOneAndUpdate({wordId: req.params.wordId},{vn: req.body.vn, en: req.body.en, status: req.body.status, exampleUse: req.body.exampleUse} , {new: true}, function (err, doc) {
 if (err) return err;
 var response = Object.assign({doc}, { message: "wordByWordId updated successfully"} );
  res.json(response);
