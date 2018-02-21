@@ -108,7 +108,6 @@ return Words.findOneAndUpdate({wordId: wordObject.wordId},
 
 
 exports.updateWordbyWordId  = function (req, res) {
- console.log(req.params.wordId, Object.keys(req.body));
 if (req.params.wordId)
 // && req.body.vn && req.body.en && req.body.status)
  {
