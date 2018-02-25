@@ -61,6 +61,32 @@ res.send("All word parameter should be defined")
 }
 };
 
+exports.getListStatusByListId = function (req, res) {
+  if (req.params.listId) {
+  List.find({listId: req.params.listId }, function (err, doc) {
+  if (err) return err;
+  res.json([doc, "all good"]);
+  // var response = Object.assign({doc}, { message: "wordByWordId updated successfully odern icht? "} );
+  //  res.json(response);
+  })
+  }
+  else {
+  res.send("All word parameter should be defined")
+  }
+  };
+
+exports.updateListStatusbyListId = function (req, res) {
+  if (req.params.listId && req.body.listName) {
+  List.findOneAndUpdate({listId: req.params.listId }, {listStatus: req.body.listStatus}, {new: true},  function (err, doc) {
+  if (err) return err;
+  res.json([doc, "all good"]);
+  })
+  }
+  else {
+  res.send("All word parameter should be defined")
+  }
+  };
+
 exports.getAllListsByUserId = function (req, res) {
 //first get List Id,
 getListsbyUserIdPromise(req.params.userId).then(function(lists) {

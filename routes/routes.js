@@ -18,6 +18,7 @@ module.exports = function(app, passport) {
  app.route('/words/:wordId').get(wordPair.getWordbyWordId).post(wordPair.updateWordbyWordId);
  app.route('/lists').post(list.create_a_list);
  app.route('/lists/:listId/words').get(list.getWordsbyListId).post(list.updateListbyListId);
+ app.route('/lists/status/:listId').get(list.getListStatusByListId).post(list.updateListStatusbyListId);
  app.route('/users/:userId/lists').get(list.getAllListsByUserId);
  app.route('/users/:userId/words').get(list.getAllWordsByUserId);
  app.route('/users').post(users.signup);
