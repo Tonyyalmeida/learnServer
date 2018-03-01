@@ -36,8 +36,8 @@ exports.getWordsbyListId = function (req, res) {
   if (req.params.listId) {
 Words.find({listId : req.params.listId}, function(err, list) {
     if (err)
-      res.send("could not be found");
-      res.json(list);
+      {res.send("could not be found");}
+      res.send(list);
   });
 }
 else {
@@ -76,7 +76,7 @@ exports.getListStatusByListId = function (req, res) {
   };
 
 exports.updateListStatusbyListId = function (req, res) {
-  if (req.params.listId && req.body.listName) {
+  if (req.params.listId) {
   List.findOneAndUpdate({listId: req.params.listId }, {listStatus: req.body.listStatus}, {new: true},  function (err, doc) {
   if (err) return err;
   res.json([doc, "all good"]);
