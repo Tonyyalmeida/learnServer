@@ -76,14 +76,15 @@ exports.getListStatusByListId = function (req, res) {
   };
 
 exports.updateListStatusbyListId = function (req, res) {
-  if (req.params.listId) {
-  List.findOneAndUpdate({listId: req.params.listId }, {listStatus: req.body.listStatus, listName: req.body.listName}, {new: true},  function (err, doc) {
+  if (req.body.listId && req.body.listStatus !== 'undefined' && req.body.listName) {
+  List.findOneAndUpdate({listId: req.body.listId }, {listStatus: req.body.listStatus, listName: req.body.listName}, {new: true},  function (err, doc) {
   if (err) return err;
   res.json([doc, "all good"]);
   })
   }
   else {
-  res.send("All word parameter should be defined")
+  //  (req.params.listId && req.body.listStatus && req.body.listName)
+  res.send("plase add all required parameters");
   }
   };
 

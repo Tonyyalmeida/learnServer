@@ -13,7 +13,7 @@ var WordSchema = new Schema({
   vn: {
     type: String,
   },
-    exampleUse: {
+    exampleUseEn: {
     type: String,
   },
     exampleUseVn: {

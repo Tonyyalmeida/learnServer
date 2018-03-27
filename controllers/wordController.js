@@ -101,7 +101,7 @@ Promise.all(req.body.map(x => getWordsbyWordIdsPromise(x))).then(
 
 function getWordsbyWordIdsPromise (wordObject) {
 return Words.findOneAndUpdate({wordId: wordObject.wordId},
-{vn: wordObject.vn, en: wordObject.en, status: wordObject.status, exampleUse: wordObject.exampleUse} , {new: true}, function( err, words) {
+{vn: wordObject.vn, en: wordObject.en, status: wordObject.status, exampleUseVn: wordObject.exampleUseVn , exampleUseEn: wordObject.exampleUseEn} , {new: true}, function( err, words) {
   return words;
 } )
 }
@@ -111,7 +111,7 @@ exports.updateWordbyWordId  = function (req, res) {
 if (req.params.wordId)
 // && req.body.vn && req.body.en && req.body.status)
  {
-Words.findOneAndUpdate({wordId: req.params.wordId},{vn: req.body.vn, en: req.body.en, status: req.body.status, exampleUse: req.body.exampleUse} , {new: true}, function (err, doc) {
+Words.findOneAndUpdate({wordId: req.params.wordId},{vn: req.body.vn, en: req.body.en, status: req.body.status, exampleUseVn: req.body.exampleUseVn, exampleUseEn: req.body.exampleUseEn} , {new: true}, function (err, doc) {
 if (err) return err;
 var response = Object.assign({doc}, { message: "wordByWordId updated successfully"} );
  res.json(response);
