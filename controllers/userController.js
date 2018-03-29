@@ -94,9 +94,12 @@ Users.find({userName: username}, function (err, foundUser) {
    })};  
 		})}})}}
 
-exports.locallogin = new LocalStrategy(
+exports.locallogin = new LocalStrategy({
+  usernameField: 'email',
+  passwordField: 'password'
+},
   function(username, password, done) {
-   getUserByUsername(username, function(err, user){
+   getUserByEmail(username, function(err, user){
    	if(err) throw err;
    	if(!user){
    		return done(null, false);
@@ -122,6 +125,10 @@ exports.locallogin = new LocalStrategy(
 }
 function getUserByUsername (username, callback) {
 	var query = {userName: username};
+	Users.findOne(query, callback);
+}
+function getUserByEmail (email, callback) {
+	var query = {emailAddress: email};
 	Users.findOne(query, callback);
 }
 
