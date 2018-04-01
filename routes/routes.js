@@ -8,19 +8,19 @@ module.exports = function(app, passport) {
  passport.use('localStrategy', localStrategy);
  app.use("/api", users.checkMyToken);
  app.route('/all_words').get(wordPair.list_all_words);
- app.route('/all_lists').get(list.list_all_lists);
+ app.route('/api/all_lists').get(list.list_all_lists);
  app.route('/all_users').get(users.list_all_users);
 
  //insecure
- app.route('/words').post(wordPair.create_a_word);
- app.route('/words/newwords/:listId').post(wordPair.create_ten_wordIds);
- app.route('/words/words').post(wordPair.updateWordsbyWordIds);
- app.route('/words/:wordId').get(wordPair.getWordbyWordId).post(wordPair.updateWordbyWordId);
- app.route('/lists').post(list.create_a_list);
- app.route('/lists/:listId/words').get(list.getWordsbyListId).post(list.updateListbyListId);
- app.route('/lists/status/:listId').get(list.getListStatusByListId).post(list.updateListStatusbyListId);
- app.route('/users/:userId/lists').get(list.getAllListsByUserId);
- app.route('/users/:userId/words').get(list.getAllWordsByUserId);
+ app.route('/api/words').post(wordPair.create_a_word);
+ app.route('/api/words/newwords/:listId').post(wordPair.create_ten_wordIds);
+ app.route('/api/words/words').post(wordPair.updateWordsbyWordIds);
+ app.route('/api/words/:wordId').get(wordPair.getWordbyWordId).post(wordPair.updateWordbyWordId);
+ app.route('/api/lists').post(list.create_a_list);
+ app.route('/api/lists/:listId/words').get(list.getWordsbyListId).post(list.updateListbyListId);
+ app.route('/api/lists/status/:listId').get(list.getListStatusByListId).post(list.updateListStatusbyListId);
+ app.route('/api/users/:userId/lists').get(list.getAllListsByUserId);
+ app.route('/api/users/:userId/words').get(list.getAllWordsByUserId);
  app.route('/users').post(users.signup);
  app.route('/login').post(passport.authenticate('localStrategy', {session: false}), function(req, res) {
      res.json(req.user);

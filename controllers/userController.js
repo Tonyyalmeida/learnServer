@@ -5,7 +5,6 @@ var app = express();
 var mongoose = require('mongoose');
 var Users = mongoose.model('Users');
 var bcrypt = require('bcryptjs');
-var jwt = require('jsonwebtoken');
 var passport = require("passport");
 var passportJWT = require("passport-jwt");
 var LocalStrategy = require('passport-local').Strategy;
@@ -58,7 +57,7 @@ exports.signup = function (req, res) {
 	req.checkBody('email', 'Email is required').notEmpty();
 	req.checkBody('email', 'Email is not valid').isEmail();
 	req.checkBody('password1', 'Password is required').notEmpty();
-	req.checkBody('password1', 'Password should be at least 8 characters long').isLength({min: 2, max: 30});
+	req.checkBody('password1', 'Password should be at least 8 characters long').isLength({min: 8, max: 30});
  req.checkBody('password2', 'Please repeat the password').notEmpty();
 	req.checkBody('password2', 'Passwords do not match').equals(req.body.password1);
     	var errors = req.validationErrors(); // an array of objects
@@ -70,13 +69,13 @@ exports.signup = function (req, res) {
   if (err) throw err;
   if (typeof foundUser[0] !== "undefined") 
     {
-      console.log(typeof foundUser[0]); res.json({error: true, messages: ["Email address is already registered"]});}
+      console.log(typeof foundUser[0]); res.json({error: true, messages: [{ msg: "Email address is already registered"}] });}
   else {
 Users.find({userName: username}, function (err, foundUser) {
   if (err) throw err;
   if (typeof foundUser[0] !== "undefined") 
     {
-      console.log(typeof foundUser[0]); res.json({error: true, messages: ["Username is already registeredd"]})}
+      console.log(typeof foundUser[0]); res.json({error: true, messages: [{ msg: "Username is already registeredd"}]})}
   else{
    Users.count({}, function(err, count) {
      if (err) throw err;
@@ -138,7 +137,7 @@ function createToken(user) {
   userId: user.userId
 }
 var token = jwt.sign(payload, app.get('superSecret'), {
-  expiresIn: "1h"// expires in 24 hours
+  expiresIn: "7d"// expires in 24 hours
 });
 return {error: false, token: token, userId: user.userId};
 }
@@ -158,7 +157,7 @@ if (token)
     }
   });
 else {
-  res.send("no token found");
+  res.json({ success: false, message: 'No token found' });
 }
 } 
 
